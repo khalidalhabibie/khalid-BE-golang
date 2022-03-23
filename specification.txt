@@ -1,4 +1,4 @@
-Dengan menggunakan framework Adonis 5, buatlah sebuah aplikasi BE dengan spesifikasi sebagai berikut :
+Dengan menggunakan bahasa Golang, buatlah sebuah aplikasi BE dengan spesifikasi sebagai berikut :
 
 
 Release 1 : Basic App
