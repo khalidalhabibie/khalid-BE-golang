@@ -18,4 +18,5 @@ func FakesRoutes(a *fiber.App) {
 	user.Post("", middleware.JWTProtectedUser(), fakesDelivery.Register)
 	user.Get("/:code", middleware.JWTProtectedUser(), fakesDelivery.FindByCode)
 	user.Get("/download/:code", middleware.JWTProtectedUser(), fakesDelivery.Download)
+	// user.Get("/download/:code", fakesDelivery.Download)
 }

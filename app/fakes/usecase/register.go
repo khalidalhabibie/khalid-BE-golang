@@ -80,7 +80,18 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 		Name:       request.Name,
 		Type:       request.Type,
 		NakesCount: request.NakesCount,
+		
 		CreatedBy:  userID,
+	}
+
+	isError := utils.ConvertDataDataFakesToPDF(*fakesM)
+	if isError {
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error("convert pdf")
+
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "Unprocessable entity"
+
+		return nil, err
 	}
 
 	err = db.FakesRepository.Insert(fakesM, nil)
