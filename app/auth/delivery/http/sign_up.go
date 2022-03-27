@@ -14,12 +14,9 @@ import (
 
 // sign up
 func SignUp(c *fiber.Ctx) error {
-
-	// log := utils.NewLog()
-
 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "start")).Info("sign up delvery")
 
-	// Create a new jamaah auth struct.
+	// Create a new user auth struct.
 	request := &request.SignUp{}
 
 	// Checking received data from JSON body.
@@ -30,7 +27,7 @@ func SignUp(c *fiber.Ctx) error {
 		return utils.ReturnFormat(c, fiber.StatusBadRequest, true, err.Error(), nil)
 	}
 
-	// Create a new validator for a Author model.
+	// Create a new validator for a user model.
 	validate := utils.NewValidator()
 
 	// Validate sign up fields.

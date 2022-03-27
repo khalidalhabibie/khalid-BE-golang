@@ -4,8 +4,11 @@ const (
 	AuthRoleNameUser   = "user"
 	AuthRoleNamePublic = "public"
 
-	AuthOTPTimeDurationMinutes = 5
+	AuthOTPTimeDurationMinutes = 1
 
 	//otp
 	AuthUserOTPSignUp = "otp-user-sign-up"
+
+	////otp
+	AuthUserOTPSignIn = "otp-user-sign-in"
 )

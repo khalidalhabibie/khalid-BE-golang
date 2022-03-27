@@ -1,17 +1,21 @@
 package usecase
 
 import (
+	"context"
+	"fmt"
 	"gokes/app/auth/delivery/http/request"
 	"gokes/app/models"
 	"gokes/pkg/utils"
+	"gokes/platform/cache"
 	"gokes/platform/database"
+	"gokes/platform/email"
+	"time"
 
 	fiber "github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
 )
 
-func SignIn(request request.SignIn) (*models.Tokens, error) { // Create database connection.
-	// log := utils.NewLog()
+func SignIn(request request.SignIn) error {
 
 	db, err := database.OpenDBConnection()
 	if err != nil {
@@ -19,7 +23,7 @@ func SignIn(request request.SignIn) (*models.Tokens, error) { // Create database
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err.Error())).Error(models.LogErrorTypeConnectionDatabase)
 
 		err := fiber.ErrUnprocessableEntity
-		return nil, err
+		return err
 	}
 
 	// find user by email
@@ -30,7 +34,7 @@ func SignIn(request request.SignIn) (*models.Tokens, error) { // Create database
 		err := fiber.ErrNotFound
 		err.Message = "User Not Found"
 
-		return nil, err
+		return err
 
 	}
 
@@ -40,20 +44,39 @@ func SignIn(request request.SignIn) (*models.Tokens, error) { // Create database
 		err := fiber.ErrUnprocessableEntity
 		err.Message = "Please check your email or password didn't match"
 
-		return nil, err
+		return err
 	}
 
-	// Generate a new pair of access and refresh tokens.
-	token, err := utils.GenerateNewTokens(userM.ID, userM.Email)
+	connRedis, err := cache.RedisConnection()
 	if err != nil {
-		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err.Error())).Error("error generate token")
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err)).Error(models.LogErrorTypeConnectionRedis)
 
 		err := fiber.ErrUnprocessableEntity
-		err.Message = "Please check your email or password didn't match"
+		err.Message = "UnprocessableEntity"
 
-		return nil, err
-
+		return err
 	}
 
-	return token, nil
+	// Save key(email) = user data to Redis.
+	otpLength := 4
+	otpNumber := utils.RandomNumber(otpLength)
+	keySignIn := fmt.Sprintf("%v-%v", models.AuthUserOTPSignIn, userM.Username)
+
+	err = connRedis.Set(context.Background(), keySignIn, otpNumber, time.Minute*models.AuthOTPTimeDurationMinutes).Err()
+	if err != nil {
+		log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, err.Error())).Error("failed to insert redis")
+
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "UnprocessableEntity"
+
+		return err
+	}
+
+	go email.SendEmailDestination(userM.Email, "Sign In OTP", fmt.Sprintf("Nomer OTP untuk sign in kamu %v : %v \nTolong konfirmasi sebelum %v menit setelah sing in",
+		userM.Username,
+		otpNumber,
+		models.AuthOTPTimeDurationMinutes))
+
+	return nil
+
 }

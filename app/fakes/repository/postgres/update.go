@@ -14,7 +14,7 @@ func (r *FakesRepository) Update(fakesM *models.Fakes, tx *gorm.DB) error {
 	}
 	err := db.Save(fakesM).Error
 	if err != nil {
-		log.Println("error-insert-update:", err)
+		log.Println("error-update-fakes:", err)
 		return err
 	}
 

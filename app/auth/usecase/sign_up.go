@@ -1,20 +1,24 @@
 package usecase
 
 import (
+	"context"
+	"encoding/json"
+	"fmt"
 	"gokes/app/auth/delivery/http/request"
 	"gokes/app/models"
 	"gokes/pkg/utils"
+	"gokes/platform/cache"
 	"gokes/platform/database"
+	"gokes/platform/email"
+	"time"
 
 	fiber "github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 	log "github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 func SignUp(request request.SignUp) (*models.User, error) {
-
-	// log := utils.NewLog()
 
 	if request.Password != request.Repassword {
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, "Password and confirm password does not match")).Error("Password and confirm password does not match")
@@ -32,6 +36,29 @@ func SignUp(request request.SignUp) (*models.User, error) {
 
 		err := fiber.ErrUnprocessableEntity
 		err.Message = "UnprocessableEntity"
+
+		return nil, err
+	}
+
+	// check username is exist?
+	userCheckM, _ := db.UserRepository.FindByUsername(request.Username)
+	if userCheckM != nil {
+
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, fmt.Sprintf("username is exist %v", request.Username))).Error("username is exist")
+
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "Username is exist"
+
+		return nil, err
+	}
+
+	// check email is exist?
+	userCheckM, _ = db.UserRepository.FindByEmail(request.Email)
+	if userCheckM != nil {
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, fmt.Sprintf("email is exist %v", request.Username))).Error("email is exist")
+
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "Email is exist"
 
 		return nil, err
 	}
@@ -63,55 +90,45 @@ func SignUp(request request.SignUp) (*models.User, error) {
 		Password: utils.GeneratePassword(request.Password),
 	}
 
-	err = db.UserRepository.Insert(userM, nil)
+	connRedis, err := cache.RedisConnection()
 	if err != nil {
-		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err.Error())).Error("error to inset  user")
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err)).Error(models.LogErrorTypeConnectionRedis)
 
 		err := fiber.ErrUnprocessableEntity
 		err.Message = "UnprocessableEntity"
 
 		return nil, err
-
 	}
 
-	return userM, nil
-
-	// connRedis, err := cache.RedisConnection()
-	// if err != nil {
-	// 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, err)).Error(models.LogErrorTypeConnectionRedis)
-
-	// 	err := fiber.ErrUnprocessableEntity
-	// 	err.Message = "UnprocessableEntity"
-
-	// 	return nil, err
-
-	// }
-
 	// Save key(email-otp) = user data to Redis.
-	// otpLength := 4
-	// otpNumber := utils.RandomNumber(otpLength)
-	// keySignUp := fmt.Sprintf("%v-%v-%v", models.AuthUserOTPSignUp, userM.Email, otpNumber)
+	otpLength := 4
+	otpNumber := utils.RandomNumber(otpLength)
+	keySignUp := fmt.Sprintf("%v-%v-%v", models.AuthUserOTPSignUp, userM.Email, otpNumber)
 
-	// dataMarshal, err := json.Marshal(userM)
-	// if err != nil {
+	dataMarshal, err := json.Marshal(userM)
+	if err != nil {
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err.Error())).Error("failed to marshal user to redis")
 
-	// 	log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, err.Error())).Error("failed to marshal")
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "UnprocessableEntity"
 
-	// 	err := fiber.ErrUnprocessableEntity
-	// 	err.Message = "UnprocessableEntity"
+		return nil, err
+	}
+	err = connRedis.Set(context.Background(), keySignUp, dataMarshal, time.Minute*models.AuthOTPTimeDurationMinutes).Err()
+	if err != nil {
+		log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, err.Error())).Error("failed to insert redis")
 
-	// 	return nil, err
-	// }
-	// err = connRedis.Set(context.Background(), keySignUp, dataMarshal, time.Minute*models.AuthOTPTimeDurationMinutes).Err()
-	// if err != nil {
-	// 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, err.Error())).Error("failed to insert redis")
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "UnprocessableEntity"
 
-	// 	err := fiber.ErrUnprocessableEntity
-	// 	err.Message = "UnprocessableEntity"
+		return nil, err
+	}
 
-	// 	return nil, err
-	// }
+	go email.SendEmailDestination(request.Email, "Sign Up OTP", fmt.Sprintf("Nomer OTP untuk sign up kamu %v : %v \nTolong konfirmasi sebelum %v menit setelah sing up",
+		userM.Username,
+		otpNumber,
+		models.AuthOTPTimeDurationMinutes))
 
-	// go email.SendEmailDestination(request.Email, "Sign Up OTP", fmt.Sprintf("<h1>Nomer OTP kamu %v </h1>", otpNumber))
+	return userM, nil
 
 }

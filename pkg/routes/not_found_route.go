@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"gokes/pkg/utils"
+
 	fiber "github.com/gofiber/fiber/v2"
 )
 
@@ -11,10 +13,7 @@ func NotFoundRoute(a *fiber.App) {
 		// Anonymous function.
 		func(c *fiber.Ctx) error {
 			// Return HTTP 404 status and JSON response.
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error":   true,
-				"message": "sorry, endpoint is not found",
-			})
+			return utils.ReturnFormat(c, fiber.StatusNotFound, true, "sorry, endpoint is not found", nil)
 		},
 	)
 }

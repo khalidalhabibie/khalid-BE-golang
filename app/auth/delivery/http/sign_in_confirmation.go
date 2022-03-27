@@ -2,21 +2,22 @@ package http
 
 import (
 	"gokes/app/auth/delivery/http/request"
+	authUsecase "gokes/app/auth/usecase"
 	"gokes/app/models"
 	"gokes/pkg/utils"
 
 	"github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
-
-	authUsecase "gokes/app/auth/usecase"
 )
 
-func SignIn(c *fiber.Ctx) error {
+func SignInConfirmaton(c *fiber.Ctx) error {
 
-	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "start")).Info("sign in")
+	// log := utils.NewLog()
+
+	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "start")).Info("sign in confirmation")
 
 	// Create a sign in struct.
-	request := &request.SignIn{}
+	request := &request.SignInConfirmation{}
 
 	// Checking received data from JSON body.
 	if err := c.BodyParser(request); err != nil {
@@ -37,14 +38,18 @@ func SignIn(c *fiber.Ctx) error {
 		return utils.ReturnFormat(c, fiber.StatusBadRequest, true, err.Error(), nil)
 	}
 
-	err := authUsecase.SignIn(*request)
+	tokenM, err := authUsecase.SignInConfirmation(*request)
 	if err != nil {
 		return utils.ReturnFormat(c, fiber.StatusUnprocessableEntity, true, err.Error(), nil)
 	}
 
-	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "end")).Info("sign in")
+	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "end")).Info("sign in confirmation")
 
 	// Return status 200 OK.
-	return utils.ReturnFormat(c, fiber.StatusOK, false, nil, "OK")
+	return utils.ReturnFormat(c, fiber.StatusOK, false, nil,
+		fiber.Map{
+			"access": tokenM.Access,
+			// "refresh": tokens.Refresh,
+		})
 
 }
