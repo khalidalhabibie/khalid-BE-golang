@@ -1,4 +1,4 @@
-package fakes
+package usecase
 
 import (
 	"gokes/app/fakes/delivery/http/request"
@@ -18,7 +18,7 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 	// log := utils.NewLog()
 
 	// check valid fakes type
-	if !helper.ValidateFake(request.Type) {
+	if !helper.ValidateFakes(request.Type) {
 
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, "fakes type invalid")).Error("type fakes validation")
 
@@ -80,8 +80,8 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 		Name:       request.Name,
 		Type:       request.Type,
 		NakesCount: request.NakesCount,
-		
-		CreatedBy:  userID,
+
+		CreatedBy: userID,
 	}
 
 	isError := utils.ConvertDataDataFakesToPDF(*fakesM)
@@ -99,6 +99,7 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error("error to insert fakes data")
 
 		err := fiber.ErrUnprocessableEntity
+		err.Code = fiber.ErrUnprocessableEntity.Code 
 		err.Message = "Failed insert data"
 
 		return nil, err

@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-func (r *FakesRepository) FindAll(config utils.PaginationConfig) ([]models.User, error) {
-	results := []models.User{}
+func (r *FakesRepository) FindAll(config utils.PaginationConfig) ([]models.Fakes, error) {
+	results := []models.Fakes{}
 
 	err := r.DB.
 		Scopes(config.MetaScopes()...).

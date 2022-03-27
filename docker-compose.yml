@@ -1,15 +1,15 @@
 version: '3.7'
 services:
 
-    app:
-      container_name: ${APP_NAME}
-      build: .
-      ports: 
-        - ${PORT}:${PORT} 
-      volumes:
-        - app:/usr/src/app
-      networks:
-        - backend
+    # app:
+    #   container_name: ${APP_NAME}
+    #   build: .
+    #   ports: 
+    #     - ${PORT}:${PORT} 
+    #   volumes:
+    #     - app:/usr/src/app
+    #   networks:
+    #     - backend
 
     #postgre
     postgres:
@@ -46,7 +46,7 @@ services:
 
 
 volumes: 
-        app:
+        # app:
         postgres-data:
         redis-data:
 

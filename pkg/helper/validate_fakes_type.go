@@ -2,7 +2,7 @@ package helper
 
 import "gokes/app/models"
 
-func ValidateFake(fakesType string) bool {
+func ValidateFakes(fakesType string) bool {
 
 	validFakesType := []string{
 		models.FakesStatusKlinik,
