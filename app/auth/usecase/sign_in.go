@@ -7,10 +7,11 @@ import (
 	"gokes/platform/database"
 
 	fiber "github.com/gofiber/fiber/v2"
+	log "github.com/sirupsen/logrus"
 )
 
 func SignIn(request request.SignIn) (*models.Tokens, error) { // Create database connection.
-	log := utils.NewLog()
+	// log := utils.NewLog()
 
 	db, err := database.OpenDBConnection()
 	if err != nil {

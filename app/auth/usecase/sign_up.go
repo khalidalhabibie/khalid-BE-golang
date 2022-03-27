@@ -9,11 +9,12 @@ import (
 	fiber "github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	log "github.com/sirupsen/logrus"
 )
 
 func SignUp(request request.SignUp) (*models.User, error) {
 
-	log := utils.NewLog()
+	// log := utils.NewLog()
 
 	if request.Password != request.Repassword {
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceAuth, "Password and confirm password does not match")).Error("Password and confirm password does not match")

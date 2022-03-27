@@ -7,10 +7,11 @@ import (
 	"gokes/pkg/utils"
 
 	fiber "github.com/gofiber/fiber/v2"
+	log "github.com/sirupsen/logrus"
 )
 
 func Register(c *fiber.Ctx) error {
-	log := utils.NewLog()
+	// log := utils.NewLog()
 
 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceFakes, "start")).Info("register")
 

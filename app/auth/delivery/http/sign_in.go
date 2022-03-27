@@ -7,11 +7,12 @@ import (
 	"gokes/pkg/utils"
 
 	"github.com/gofiber/fiber/v2"
+	log "github.com/sirupsen/logrus"
 )
 
 func SignIn(c *fiber.Ctx) error {
 
-	log := utils.NewLog()
+	// log := utils.NewLog()
 
 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "start")).Info("sign in")
 

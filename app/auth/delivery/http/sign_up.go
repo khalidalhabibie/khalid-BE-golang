@@ -8,12 +8,14 @@ import (
 	authUsecase "gokes/app/auth/usecase"
 
 	fiber "github.com/gofiber/fiber/v2"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // sign up
 func SignUp(c *fiber.Ctx) error {
 
-	log := utils.NewLog()
+	// log := utils.NewLog()
 
 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "start")).Info("sign up delvery")
 
