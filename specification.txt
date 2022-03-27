@@ -39,8 +39,8 @@ Explore 1 atau 2 fitur tambahan yang menurut kamu cukup challenging. Dan penilai
 
 Contoh :
 - email validation ketika registrasi
-- export data bisa dipilih berdasarkan kode kota tertentu
-- export data bisa langsung jadi PDF dan looked nice
+- export data bisa dipilih berdasarkan kode kota tertentu   
+- export data bisa langsung jadi PDF dan looked nice (udah)
 - logging, lengkap dengan halaman dashboard untuk monitor nya
-- dockerize, lengkap dengan docker-compose nya, dan running dengan hanya 1 - 2 step sederhana, usahakan env variable nya baca dari docker-compose.yml
+- dockerize, lengkap dengan docker-compose nya, dan running dengan hanya 1 - 2 step sederhana, usahakan env variable nya baca dari docker-compose.yml (udah)
 - dll

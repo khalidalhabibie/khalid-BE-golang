@@ -28,7 +28,6 @@ func FindByCode(c *fiber.Ctx) error {
 
 	}
 
-
 	return utils.ReturnFormat(c, fiber.StatusOK, false, nil, dataM)
 
 }

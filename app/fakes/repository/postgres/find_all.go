@@ -12,7 +12,7 @@ func (r *FakesRepository) FindAll(config utils.PaginationConfig) ([]models.User,
 	err := r.DB.
 		Scopes(config.MetaScopes()...).
 		Scopes(config.Scopes()...).
-		Find(&results).Error
+		Find(&results).Error	
 	if err != nil {
 		log.Println("error-find-all-fakes:", err)
 		return nil, err

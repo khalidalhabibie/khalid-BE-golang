@@ -1,6 +1,16 @@
 version: '3.7'
 services:
 
+    app:
+      container_name: ${APP_NAME}
+      build: .
+      ports: 
+        - ${PORT}:${PORT} 
+      volumes:
+        - app:/usr/src/app
+      networks:
+        - backend
+
     #postgre
     postgres:
         image: postgres:12
@@ -36,6 +46,7 @@ services:
 
 
 volumes: 
+        app:
         postgres-data:
         redis-data:
 

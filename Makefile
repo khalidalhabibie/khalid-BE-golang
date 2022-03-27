@@ -48,7 +48,6 @@ migrate.force $(version):
 migrate.create $(file): 
 	migrate create -ext sql -dir $(MIGRATIONS_FOLDER) -seq $(file)
 
-# swag:
-# 	swag init
+
 
 

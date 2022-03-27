@@ -17,6 +17,6 @@ func FakesRoutes(a *fiber.App) {
 	user := route.Group("/user")
 	user.Post("", middleware.JWTProtectedUser(), fakesDelivery.Register)
 	user.Get("/:code", middleware.JWTProtectedUser(), fakesDelivery.FindByCode)
-	user.Get("/download/:code", middleware.JWTProtectedUser(), fakesDelivery.Download)
-	// user.Get("/download/:code", fakesDelivery.Download)
+	user.Get("/download/:code", middleware.JWTProtectedUser(), fakesDelivery.DownloadByCode)
+	// user.Get("/download/:code", fakesDelivery.DownloadByCode)
 }

@@ -8,7 +8,7 @@ import (
 	fiber "github.com/gofiber/fiber/v2"
 )
 
-func Download(c *fiber.Ctx) error {
+func DownloadByCode(c *fiber.Ctx) error {
 
 	code := c.Params("code")
 
