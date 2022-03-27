@@ -14,15 +14,16 @@ func ConnectionURLBuilder(n string) (string, error) {
 	switch n {
 	case "postgres":
 		// URL for PostgreSQL connection.
-		url = fmt.Sprintf(
-			"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-			os.Getenv("POSTGRES_HOST"),
-			os.Getenv("POSTGRES_PORT"),
-			os.Getenv("POSTGRES_USER"),
-			os.Getenv("POSTGRES_PASSWORD"),
-			os.Getenv("POSTGRES_DB"),
-			os.Getenv("DB_SSL_MODE"),
-		)
+		// url = fmt.Sprintf(
+		// 	"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		// 	os.Getenv("POSTGRES_HOST"),
+		// 	os.Getenv("POSTGRES_PORT"),
+		// 	os.Getenv("POSTGRES_USER"),
+		// 	os.Getenv("POSTGRES_PASSWORD"),
+		// 	os.Getenv("POSTGRES_DB"),
+		// 	os.Getenv("DB_SSL_MODE"),
+		// )
+		url = fmt.Sprint(os.Getenv("DB_ADDRESS_STRING"))
 	case "redis":
 		// URL for Redis connection.
 		url = fmt.Sprintf(
