@@ -1,5 +1,5 @@
 # Gokes 
-Aplikasi ini bertujuan untuk  merecord fasilitas kesehatan.
+Aplikasi ini bertujuan untuk  merecord fasilitas kesehatan. Pada branch main di deploy pada heroku karna hanya menggunakan postgre. untuk fitur otp ada pada staging tapi tidak di deploy karna heroku tidak support redis yang free
 
 Aplikasi ini memiliki :
 * RESTful endpoint 
