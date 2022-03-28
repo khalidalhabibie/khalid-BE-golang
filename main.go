@@ -18,18 +18,6 @@ import (
 
 func main() {
 
-	// log := log.New()
-	// // with Json Formatter
-	// // log.Formatter = log.JSONFormatter{}
-	// log.SetOutput(os.Stdout)
-
-	// // You could set this to any `io.Writer` such as a file
-	// file, err := os.OpenFile("logrus.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0755)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// log.SetOutput(file)
-
 	// Define Fiber config.
 	config := configs.FiberConfig()
 

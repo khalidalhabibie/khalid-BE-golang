@@ -40,7 +40,7 @@ func SignInConfirmaton(c *fiber.Ctx) error {
 
 	tokenM, err := authUsecase.SignInConfirmation(*request)
 	if err != nil {
-		return utils.ReturnFormat(c, fiber.StatusUnprocessableEntity, true, err.Error(), nil)
+		return utils.ReturnFormat(c, fiber.StatusUnprocessableEntity, true, "unprocessable entity", nil)
 	}
 
 	log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceAuth, "end")).Info("sign in confirmation")

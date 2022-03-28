@@ -5,6 +5,7 @@ import (
 	"gokes/app/models"
 	"gokes/pkg/utils"
 	"gokes/platform/database"
+	"os"
 
 	fiber "github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
@@ -25,7 +26,6 @@ func Delete(code string) (*models.Fakes, error) {
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error(fmt.Sprintf("error find fakes by code %v ", code))
 
 		err := fiber.ErrNotFound
-		err.Code = fiber.ErrNotFound.Code
 		err.Message = "data not found"
 
 		return nil, err
@@ -36,11 +36,12 @@ func Delete(code string) (*models.Fakes, error) {
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error(fmt.Sprintf("error deleted fakes by code %v ", code))
 
 		err := fiber.ErrUnprocessableEntity
-		err.Code = fiber.ErrUnprocessableEntity.Code
-
+		err.Message = fiber.ErrUnprocessableEntity.Message
 		return nil, err
 	}
 
-	return nil, err
+	os.Remove(fmt.Sprintf("data/%v.pdf", fakesM.Code))
+
+	return fakesM, nil
 
 }

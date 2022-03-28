@@ -58,7 +58,18 @@ func Update(code string, request request.Update) (*models.Fakes, error) {
 	}
 
 	// update
-	err = db.FakesRepository.Insert(fakesM, nil)
+	isError := utils.ConvertDataDataFakesToPDF(*fakesM)
+	if isError {
+		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error("convert pdf")
+
+		err := fiber.ErrUnprocessableEntity
+		err.Message = "Unprocessable entity"
+
+		return nil, err
+	}
+
+	// update
+	err = db.FakesRepository.Update(fakesM, nil)
 	if err != nil {
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error("error to update fakes data")
 
