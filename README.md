@@ -123,18 +123,28 @@ _Request Body_
 _Response (200)_
 ```
 {
-  "id": <given id by system>,
-  "name": "<posted name>",
-  "description": "<posted description>",
-  "createdAt": "2020-03-20T07:15:12.149Z",
-  "updatedAt": "2020-03-20T07:15:12.149Z",
+  "data": {
+    "code": "FAKES-9362827567",
+    "created_at": "2022-03-28T07:44:06.047673857Z",
+    "deleted_at": null,
+    "description": "rumah sakit terbesar di kota A ",
+    "id": "1a013a4d-a809-4a7b-b2bf-3925d0f4cf0d",
+    "nakes_count": 101,
+    "name": "rumah sakit A",
+    "type": "rumah_sakit",
+    "updated_at": "2022-03-28T07:44:06.047673857Z",
+    "updated_by": "b6ac2071-c367-4a65-9df2-095f4f64e18b"
+  },
+  "http_code": 200,
+  "is_error": false,
+  "message": null
 }
 ```
 
 ---
-### PUT /assets/:id
+### PUT /fakes/user/download/:code
 
-> Update an asset defined by the id provided
+> mendownload file pdf yang return file pdf juga
 
 _Request Header_
 ```
@@ -145,21 +155,12 @@ _Request Header_
 
 _Request Body_
 ```
-{
-  "name": "<name to get insert into>",
-  "description": "<description to get insert into>"
-}
+tidak diperlukan
 ```
 
 _Response (200 - OK)_
 ```
-{
-  "id": <given id by system>,
-  "name": "<posted name>",
-  "description": "<posted description>",
-  "createdAt": "2020-03-20T07:15:12.149Z",
-  "updatedAt": "2020-03-20T07:15:12.149Z",
-}
+responnya adalah file pdf
 ```
 
 ---
