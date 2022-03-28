@@ -231,7 +231,45 @@ _Response (200)_
 -
 ### GET /fakes/user/:code
 
-> menambil data fakes berdasarkan code
+> mengambil data fakes berdasarkan code
+
+_Request Header_
+```
+{
+  "access_token": "<token akses>"
+}
+```
+
+_Request Body_
+```
+tidak diperlukan
+```
+
+_Response (200)_
+```
+{
+  "data": {
+    "code": "FAKES-9362827567",
+    "created_at": "2022-03-28T07:44:06.047673Z",
+    "deleted_at": null,
+    "description": "rumah sakit terbesar di kota A ",
+    "id": "1a013a4d-a809-4a7b-b2bf-3925d0f4cf0d",
+    "nakes_count": 101,
+    "name": "rumah sakit B",
+    "type": "rumah_sakit",
+    "updated_at": "2022-03-28T08:23:51.338478Z",
+    "updated_by": "b6ac2071-c367-4a65-9df2-095f4f64e18b"
+  },
+  "http_code": 200,
+  "is_error": false,
+  "message": null
+}
+```
+
+
+### Delete /fakes/user/:code
+
+> mengambil data fakes berdasarkan code
 
 _Request Header_
 ```
