@@ -75,13 +75,13 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 	}
 
 	fakesM := &models.Fakes{
-		Code:       newCode,
-		ID:         newID,
-		Name:       request.Name,
-		Type:       request.Type,
-		NakesCount: request.NakesCount,
-
-		CreatedBy: userID,
+		Code:        newCode,
+		ID:          newID,
+		Name:        request.Name,
+		Type:        request.Type,
+		NakesCount:  request.NakesCount,
+		Description: request.Description,
+		CreatedBy:   userID,
 	}
 
 	isError := utils.ConvertDataDataFakesToPDF(*fakesM)
@@ -99,7 +99,7 @@ func Register(userID uuid.UUID, request request.Register) (*models.Fakes, error)
 		log.WithFields(utils.LogFormat(models.LogLayerUsecase, models.LogServiceFakes, err.Error())).Error("error to insert fakes data")
 
 		err := fiber.ErrUnprocessableEntity
-		err.Code = fiber.ErrUnprocessableEntity.Code 
+		err.Code = fiber.ErrUnprocessableEntity.Code
 		err.Message = "Failed insert data"
 
 		return nil, err
