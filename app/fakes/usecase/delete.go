@@ -5,6 +5,7 @@ import (
 	"gokes/app/models"
 	"gokes/pkg/utils"
 	"gokes/platform/database"
+	"os"
 
 	fiber "github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
@@ -41,6 +42,8 @@ func Delete(code string) (*models.Fakes, error) {
 		return nil, err
 	}
 
-	return nil, err
+	os.Remove(fmt.Sprintf("data/%v.pdf", fakesM.Code))
+
+	return fakesM, nil
 
 }

@@ -18,7 +18,7 @@ func Delete(c *fiber.Ctx) error {
 	if err != nil {
 		log.WithFields(utils.LogFormat(models.LogLayerDelivery, models.LogServiceFakes, err.Error())).Error("error update fakes")
 
-		utils.ReturnFormat(c, fiber.ErrUnprocessableEntity.Code, true, err.Error(), nil)
+		return utils.ReturnFormat(c, fiber.ErrUnprocessableEntity.Code, true, err.Error(), nil)
 	}
 
 	dataM, err := utils.MarshalUsers(fakesM, models.AuthRoleNameUser)

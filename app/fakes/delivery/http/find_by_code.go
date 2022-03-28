@@ -17,7 +17,7 @@ func FindByCode(c *fiber.Ctx) error {
 	code := c.Params("code")
 	fakesM, err := fakesUsecase.FindByCode(code)
 	if err != nil {
-		utils.ReturnFormat(c, fiber.StatusNotFound, true, "data not found", nil)
+		return utils.ReturnFormat(c, fiber.StatusNotFound, true, "data not found", nil)
 	}
 
 	dataM, err := utils.MarshalUsers(fakesM, models.AuthRoleNameUser)
