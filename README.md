@@ -142,51 +142,8 @@ _Response (200)_
 ```
 
 ---
-### PATCH /fakes/user
 
-> Create fakes baru untuk di daftarkan
-
-_Request Header_
-```
-{
-  "access_token": "<token akses>"
-}
-```
-
-_Request Body_
-```
-{
-  "name": "<nama yang digunakan untuk pendaftaran>",
-  "nakes_count": "<jumlah nakes yang terdapat pada fasilitas kesehatan tersebut>"
-  "type":"<type fakes yang ada yaitu rumah_sakit,puskesmas, posyandu, dan klinik >"
-  "description":"description yang diperlukan pada pada fakes tersebut"
-```
-
-_Response (200)_
-```
-{
-  "data": {
-    "code": "FAKES-9362827567",
-    "created_at": "2022-03-28T07:44:06.047673Z",
-    "deleted_at": null,
-    "description": "rumah sakit terbesar di kota A ",
-    "id": "1a013a4d-a809-4a7b-b2bf-3925d0f4cf0d",
-    "nakes_count": 101,
-    "name": "rumah sakit B",
-    "type": "rumah_sakit",
-    "updated_at": "2022-03-28T08:23:51.338478273Z",
-    "updated_by": "b6ac2071-c367-4a65-9df2-095f4f64e18b"
-  },
-  "http_code": 200,
-  "is_error": false,
-  "message": null
-}
-```
-
-
-
----
-### PATCH /fakes/user
+### PATCH /fakes/user/:code
 
 > update fakes baru untuk di daftarkan
 
@@ -302,4 +259,26 @@ _Response (200)_
   "is_error": false,
   "message": null
 }
+```
+
+---
+## GET /fakes/user/download/:code
+
+> download data fakes berdasarkan code
+
+_Request Header_
+```
+{
+  "access_token": "<token akses>"
+}
+```
+
+_Request Body_
+```
+tidak diperlukan
+```
+
+_Response (200)_
+```
+DATA PDF
 ```
