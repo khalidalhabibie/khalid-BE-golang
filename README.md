@@ -212,7 +212,7 @@ _Response (200)_
 ```
 
 ---
-### PATCH /fakes/user
+### PATCH /fakes/user:code
 
 > update fakes baru untuk di daftarkan
 
